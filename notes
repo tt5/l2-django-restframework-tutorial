@@ -7,3 +7,22 @@ http --form POST http://127.0.0.1:8000/snippets/ code="print(123)"
 http --json POST http://127.0.0.1:8000/snippets/ code="print(456)"
 
 http -a admin:123 post :8000/snippets/ code="some"
+
+curl \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"username": "user1", "password": "user1password"}' \
+  http://localhost:8000/api/token/
+
+
+curl \
+  -H "Authorization: Bearer <...>"\
+  http://localhost:8000/api/some-protected-view/
+
+When this short-lived access token expires, you can use the longer-lived refresh token to obtain another access token:
+
+curl \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY0MDAwOTkxNCwianRpIjoiMjlmZDUwMDY5NDA0NDFkYWFlYmRhMGQyYTk3MDZjODIiLCJ1c2VyX2lkIjoyfQ.l1pSfVKvK3Okjl0y1Wzfl4OwL8A9nwqfK25dNMs5vU8"}' \
+  http://localhost:8000/api/token/refresh/
